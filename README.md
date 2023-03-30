@@ -1,4 +1,7 @@
-## Micronaut 3.8.7 Documentation
+See https://github.com/micronaut-projects/micronaut-starter/issues/1579
+This changes the project to use the latest Micronaut 4 milestones and snapshots
+
+[## Micronaut 3.8.7 Documentation
 
 - [User Guide](https://docs.micronaut.io/3.8.7/guide/index.html)
 - [API Reference](https://docs.micronaut.io/3.8.7/api/index.html)
@@ -12,7 +15,7 @@
 
 Handler: io.micronaut.function.aws.proxy.MicronautLambdaHandler
 
-
+]()
 ## Deployment with GraalVM
 
 If you want to deploy to AWS Lambda as a GraalVM native image, run:
