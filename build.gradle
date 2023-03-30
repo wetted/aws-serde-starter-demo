@@ -1,0 +1,56 @@
+plugins {
+    id("groovy") 
+    id("com.github.johnrengelman.shadow") version "7.1.2"
+    id("io.micronaut.application") version "4.0.0-SNAPSHOT"
+}
+
+version = "0.1"
+group = "dean.wette"
+
+repositories {
+    maven { url "https://s01.oss.sonatype.org/content/repositories/snapshots/" }
+    mavenCentral()
+}
+
+dependencies {
+    annotationProcessor("io.micronaut.validation:micronaut-validation-processor:4.0.0-M2")
+    annotationProcessor("io.micronaut.serde:micronaut-serde-processor:2.0.0-M1")
+
+    compileOnly("org.graalvm.nativeimage:svm:22.3.1")
+
+    implementation("io.micronaut:micronaut-http-client:4.0.0-M1")
+    implementation("io.micronaut.validation:micronaut-validation:4.0.0-M2")
+    implementation("io.micronaut.serde:micronaut-serde-jackson:2.0.0-M1")
+    implementation("io.micronaut.aws:micronaut-aws-sdk-v2:4.0.0-SNAPSHOT")
+    implementation("io.micronaut.aws:micronaut-function-aws-custom-runtime:4.0.0-SNAPSHOT")
+
+    runtimeOnly("org.yaml:snakeyaml")
+    runtimeOnly("ch.qos.logback:logback-classic")
+}
+
+application {
+    mainClass.set("io.micronaut.function.aws.runtime.MicronautLambdaRuntime")
+}
+java {
+    sourceCompatibility = JavaVersion.toVersion("17")
+    targetCompatibility = JavaVersion.toVersion("17")
+}
+
+graalvmNative.toolchainDetection = false
+micronaut {
+    version("4.0.0-SNAPSHOT")
+    runtime("lambda_provided")
+    testRuntime("spock2")
+    processing {
+        incremental(true)
+        annotations("dean.wette.*")
+    }
+}
+
+tasks.named("dockerfileNative") {
+    args(
+        "-XX:MaximumHeapSizePercent=80",
+        "-Dio.netty.allocator.numDirectArenas=0",
+        "-Dio.netty.noPreferDirect=true"
+    )
+}
