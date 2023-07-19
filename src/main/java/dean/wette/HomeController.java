@@ -1,4 +1,5 @@
 package dean.wette;
+
 import io.micronaut.http.annotation.Controller;
 import io.micronaut.http.annotation.Get;
 import java.util.Collections;
